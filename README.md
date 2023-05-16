@@ -1,8 +1,17 @@
-# ChatGPT plugins quickstart
+# Run code that ChatGPT generates
 
-Get a todo list ChatGPT plugin up and running in under 5 minutes using Python. If you do not already have plugin developer access, please [join the waitlist](https://openai.com/waitlist/plugins).
+You can ask ChatGPT to write snippets of code, and with this plugin you can tell it to evaluate or test the code it writes without leaving ChatGPT. 
+You need to have access to ChatGPT plugins to use this (and python installed). 
 
-## Setup
+### Usage: 
+![example](https://github.com/michaelneale/RunGPT/assets/14976/9485645b-3013-42af-88c3-8be95eb2e5f7)
+
+## How it works
+
+ChatGPT has a reasonable idea of what language it is generating, so an appropriate docker container can be used to evaluate the code. Note that containerizing is for convenience, not for security. Buyer beware. 
+This could be how the machines take over.
+
+## Installing
 
 To install the required packages for this plugin, run the following command:
 
@@ -28,4 +37,8 @@ The plugin should now be installed and enabled! You can start with a question li
 
 ## Getting help
 
-If you run into issues or have questions building a plugin, please join our [Developer community forum](https://community.openai.com/c/chat-plugins/20).
+Open an issue or fork it. 
+
+## Warning
+
+This will evaluate code in a container that matches the language, so be careful. 
