@@ -1,7 +1,7 @@
 # Run code that ChatGPT generates
 
 You can ask ChatGPT to write snippets of code, and with this plugin you can tell it to evaluate or test the code it writes without leaving ChatGPT. 
-You need to have access to ChatGPT plugins to use this (and python installed). 
+You need to have access to ChatGPT plugins to use this (and python + docker installed). 
 
 ### Usage: 
 ![example](https://github.com/michaelneale/RunGPT/assets/14976/9485645b-3013-42af-88c3-8be95eb2e5f7)
