@@ -6,8 +6,6 @@ from quart import request
 
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
 
-import docker
-
 import subprocess
 import tempfile
 import os
