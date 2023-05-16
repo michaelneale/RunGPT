@@ -6,29 +6,56 @@ from quart import request
 
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
 
-# Keep track of todo's. Does not persist if Python session is restarted.
-_TODOS = {}
+import docker
 
-@app.post("/todos/<string:username>")
-async def add_todo(username):
+import subprocess
+import tempfile
+import os
+
+def run_code_in_container(language, code):
+    # select docker image based on language
+    if language.lower() == 'javascript' or language.lower() == 'typescript':
+        image = 'node'
+        file_extension = '.js'
+    elif language.lower() == 'ruby':
+        image = 'ruby'
+        file_extension = '.rb'
+    elif language.lower() == 'python':
+        image = 'python'
+        file_extension = '.py'
+    else:
+        raise ValueError(f'Unsupported language: {language}')
+
+    # create a temporary file and write the code to it
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=file_extension)
+    temp_file.write(code.encode())
+    temp_file.close()
+
+    # build and run the docker command
+    try:
+        command = f'docker run --rm -v {os.path.dirname(temp_file.name)}:/tmp {image} {image} /tmp/{os.path.basename(temp_file.name)}'
+        process = subprocess.run(command, shell=True, check=True, capture_output=True)
+    finally:
+        os.unlink(temp_file.name)  # clean up the temporary file
+
+    return process.stdout.decode()
+
+# Example usage:
+#print(run_code_in_container('python', 'print("Hello, world!")'))
+
+@app.post("/eval")
+async def eval():
     request = await quart.request.get_json(force=True)
-    if username not in _TODOS:
-        _TODOS[username] = []
-    _TODOS[username].append(request["todo"])
-    return quart.Response(response='OK', status=200)
+    print(request)
+    code = request['code']
+    
 
-@app.get("/todos/<string:username>")
-async def get_todos(username):
-    return quart.Response(response=json.dumps(_TODOS.get(username, [])), status=200)
+    out = run_code_in_container(request['lang'], code)
+    response = {"stdout": out}
 
-@app.delete("/todos/<string:username>")
-async def delete_todo(username):
-    request = await quart.request.get_json(force=True)
-    todo_idx = request["todo_idx"]
-    # fail silently, it's a simple plugin
-    if 0 <= todo_idx < len(_TODOS[username]):
-        _TODOS[username].pop(todo_idx)
-    return quart.Response(response='OK', status=200)
+    return quart.Response(response=json.dumps(response), status=200)
+
+
 
 @app.get("/logo.png")
 async def plugin_logo():
@@ -54,3 +81,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+

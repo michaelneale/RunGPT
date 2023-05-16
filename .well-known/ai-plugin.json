@@ -1,9 +1,9 @@
 {
     "schema_version": "v1",
-    "name_for_human": "TODO Plugin (no auth)",
-    "name_for_model": "todo",
-    "description_for_human": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
-    "description_for_model": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
+    "name_for_human": "Code Evaluator Plugin",
+    "name_for_model": "code_eval",
+    "description_for_human": "Plugin for evaluating code that was generated to see if it works.",
+    "description_for_model": "Plugin for evaluating code that was generated to see if it works, and show the output.",
     "auth": {
       "type": "none"
     },
